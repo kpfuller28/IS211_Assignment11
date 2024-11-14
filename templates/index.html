@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    table, th, td {
+      border:1px solid black;
+      padding: 5px;
+      border-spacing: 5px 2px;
+    }
+    </style>
+  <head>
+    <title>To Do</title>
+  </head>
+
+  <body>
+    {% if todos|length > 0 %}
+    <table>
+      <tr>
+        <th>To Do Items</th>
+        <th>Email</th>
+        <th>Priority Level</th>
+      </tr>
+      {% for todo in todos %}
+        <tr>
+          <td>{{todo[0]}}</td>
+          <td>{{todo[1]}}</td>
+          <td>{{todo[2]}}</td>
+          <td>
+            <form action="/delete" method="POST">
+              <input type="hidden" name="id" value="{{todos.index(todo)}}"/>
+              <input type="submit" value="Delete"/>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+      <h2>No Tasks To Do!</h2>
+    {% endif %}
+    <ul style="display: flex; list-style-type: none;">
+      <li style="padding-right: 15px;">
+        <form action="/save" method="POST">
+          <input type="submit" value="Save List"/>
+        </form>
+      </li>
+      {% if todos|length > 0 %}
+      <li>
+        <form action="/clear">
+          <input type="submit" value="Clear"/>
+        </form>
+      </li>
+      {% endif %}
+    </ul>
+    {% if error %}
+      <p>{{error}}</p>
+    {% endif %}
+    <h2>Add a Task to the List</h2>
+    <form action="/submit" method="post">
+      <label for="task">Task:</label>
+      <input type="text" id="task" name="task"/><br><br>
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email"/><br><br>
+      <select name="priority" id="priority">
+        <option hidden selected value="">Pick a priority level</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select><br><br>
+      <input type = "submit" value="Add To Do Item"/>
+    </form>
+  </body>
+</html>
